@@ -1059,7 +1059,7 @@ function isTheServerOnline(){
   local serverresp
 
   if [[ "$publicip" =~ [1-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]* ]]; then
-    serverresp="$(curl -s "http://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=${publicip}:$(getQueryPort)")"
+    serverresp="$(curl -s "https://api.steampowered.com/ISteamApps/GetServersAtAddress/v0001?addr=${publicip}:$(getQueryPort)")"
   fi
 
   # If the Steam server response contains "addr": "$ip:$port",
@@ -2446,7 +2446,7 @@ getCollectionMods(){
           -s \
           -d \
           "collectioncount=1&publishedfileids[0]=${m}" \
-          "http://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1" |
+          "https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1" |
           perl -e '
               use JSON;
               my $js = decode_json <>;
@@ -2528,7 +2528,7 @@ getLocalModLastUpdated(){
 #
 getAvailModLastUpdated(){
   local modid="$1"
-  local serverresp="$(curl -s -d "itemcount=1&publishedfileids[0]=${modid}" "http://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1")"
+  local serverresp="$(curl -s -d "itemcount=1&publishedfileids[0]=${modid}" "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1")"
   local remupd=
   if [[ "$serverresp" =~ \"time_updated\":[[:space:]]*([^,]*) ]]; then
     remupd="${BASH_REMATCH[1]}"
@@ -2846,7 +2846,7 @@ doExtractMod(){
       fi
     done
 
-    modname="$(curl -s "http://steamcommunity.com/sharedfiles/filedetails/?id=${modid}" | sed -n 's|^.*<div class="workshopItemTitle">\([^<]*\)</div>.*|\1|p')"
+    modname="$(curl -s "https://steamcommunity.com/sharedfiles/filedetails/?id=${modid}" | sed -n 's|^.*<div class="workshopItemTitle">\([^<]*\)</div>.*|\1|p')"
 
     if [ -f "${modextractdir}/.mod" ]; then
       rm "${modextractdir}/.mod"
@@ -3457,7 +3457,7 @@ printStatus(){
 
     if isTheServerOnline; then
       echo -e "$NORMAL" "Server online: " "$GREEN" "Yes" "$NORMAL"
-      echo -e "$NORMAL" "ARKServers link: " "$GREEN" "http://arkservers.net/server/${publicip}:$(getQueryPort)" "$NORMAL"
+      echo -e "$NORMAL" "ARKServers link: " "$GREEN" "https://arkservers.net/server/${publicip}:$(getQueryPort)" "$NORMAL"
       echo -e "$NORMAL" "Steam connect link: " "$GREEN" "steam://connect/${publicip}:$(getQueryPort)" "$NORMAL"
     else
       echo -e "$NORMAL" "Server online: " "$RED" "No" "$NORMAL"
